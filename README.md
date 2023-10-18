@@ -27,6 +27,8 @@ A long term goal is a professional security review, and maybe an inclusion in st
 - **RFC 5705**: [Keying Material Exporters for Transport Layer Security (TLS)][rfc5705]
 - **RFC 7627**: [Transport Layer Security (TLS) - Session Hash and Extended Master Secret Extension][rfc7627]
 - **RFC 7301**: [Transport Layer Security (TLS) - Application-Layer Protocol Negotiation Extension][rfc7301]
+- **RFC 9146**: [Connection Identifier for DTLS 1.2][rfc9146]
+
 
 [rfc5289]: https://tools.ietf.org/html/rfc5289
 [rfc5487]: https://tools.ietf.org/html/rfc5487
@@ -37,6 +39,7 @@ A long term goal is a professional security review, and maybe an inclusion in st
 [rfc7301]: https://tools.ietf.org/html/rfc7301
 [rfc7627]: https://tools.ietf.org/html/rfc7627
 [rfc8422]: https://tools.ietf.org/html/rfc8422
+[rfc9146]: https://tools.ietf.org/html/rfc9146
 
 ### Goals/Progress
 This will only be targeting DTLS 1.2, and the most modern/common cipher suites.

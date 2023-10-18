@@ -15,6 +15,7 @@ const (
 	ContentTypeHandshake        ContentType = 22
 	ContentTypeApplicationData  ContentType = 23
 	ContentTypeConnectionID     ContentType = 25
+	ContentTypeRRC              ContentType = 27 // TBD2 self-allocated
 )
 
 // Content is the top level distinguisher for a DTLS Datagram
