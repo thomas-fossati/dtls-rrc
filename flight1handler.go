@@ -98,6 +98,12 @@ func flight1Generate(c flightConn, state *State, _ *handshakeCache, cfg *handsha
 		})
 	}
 
+	if cfg.rrc == EnableRRCBasic || cfg.rrc == EnableRRCExtended {
+		extensions = append(extensions, &extension.UseRRC{
+			Supported: true,
+		})
+	}
+
 	if len(cfg.serverName) > 0 {
 		extensions = append(extensions, &extension.ServerName{ServerName: cfg.serverName})
 	}

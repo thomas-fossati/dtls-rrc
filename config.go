@@ -52,6 +52,11 @@ type Config struct {
 	// should be disabled, requested, or required (default requested).
 	ExtendedMasterSecret ExtendedMasterSecretType
 
+	// RRC determines if the "Return Routability Check" extension should be
+	// disabled or enabled using either the basic of enhanced algorithms.
+	// The default is enabled using the basic algorithm.
+	RRC RRCType
+
 	// FlightInterval controls how often we send outbound handshake messages
 	// defaults to time.Second
 	FlightInterval time.Duration
@@ -243,6 +248,15 @@ const (
 	RequestExtendedMasterSecret ExtendedMasterSecretType = iota
 	RequireExtendedMasterSecret
 	DisableExtendedMasterSecret
+)
+
+// RRCType
+type RRCType int
+
+const (
+	EnableRRCBasic RRCType = iota
+	DisableRRC
+	EnableRRCExtended
 )
 
 func validateConfig(config *Config) error {

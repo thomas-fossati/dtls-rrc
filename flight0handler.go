@@ -71,6 +71,10 @@ func flight0Parse(_ context.Context, _ flightConn, state *State, cache *handshak
 			if cfg.extendedMasterSecret != DisableExtendedMasterSecret {
 				state.extendedMasterSecret = true
 			}
+		case *extension.UseRRC:
+			if cfg.rrc != DisableRRC {
+				state.rrc = true
+			}
 		case *extension.ServerName:
 			state.serverName = e.ServerName // remote server name
 		case *extension.ALPN:

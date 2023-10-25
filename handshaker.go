@@ -97,6 +97,7 @@ type handshakeConfig struct {
 	localCipherSuites           []CipherSuite             // Available CipherSuites
 	localSignatureSchemes       []signaturehash.Algorithm // Available signature schemes
 	extendedMasterSecret        ExtendedMasterSecretType  // Policy for the Extended Master Support extension
+	rrc                         RRCType                   // Policy for RRC
 	localSRTPProtectionProfiles []SRTPProtectionProfile   // Available SRTPProtectionProfiles, if empty no SRTP support
 	serverName                  string
 	supportedProtocols          []string

@@ -61,6 +61,10 @@ func flight3Parse(ctx context.Context, c flightConn, state *State, cache *handsh
 				if cfg.extendedMasterSecret != DisableExtendedMasterSecret {
 					state.extendedMasterSecret = true
 				}
+			case *extension.UseRRC:
+				if cfg.rrc != DisableRRC {
+					state.rrc = true
+				}
 			case *extension.ALPN:
 				if len(e.ProtocolNameList) > 1 { // This should be exactly 1, the zero case is handle when unmarshalling
 					return 0, &alert.Alert{Level: alert.Fatal, Description: alert.InternalError}, extension.ErrALPNInvalidFormat // Meh, internal error?
@@ -268,6 +272,12 @@ func flight3Generate(_ flightConn, state *State, _ *handshakeCache, cfg *handsha
 	if cfg.extendedMasterSecret == RequestExtendedMasterSecret ||
 		cfg.extendedMasterSecret == RequireExtendedMasterSecret {
 		extensions = append(extensions, &extension.UseExtendedMasterSecret{
+			Supported: true,
+		})
+	}
+
+	if cfg.rrc == EnableRRCBasic || cfg.rrc == EnableRRCExtended {
+		extensions = append(extensions, &extension.UseRRC{
 			Supported: true,
 		})
 	}

@@ -46,6 +46,7 @@ type State struct {
 
 	preMasterSecret      []byte
 	extendedMasterSecret bool
+	rrc                  bool
 
 	namedCurve                 elliptic.Curve
 	localKeypair               *elliptic.Keypair

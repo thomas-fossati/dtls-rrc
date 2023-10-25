@@ -181,6 +181,7 @@ func createConn(ctx context.Context, nextConn net.PacketConn, rAddr net.Addr, co
 		localCipherSuites:           cipherSuites,
 		localSignatureSchemes:       signatureSchemes,
 		extendedMasterSecret:        config.ExtendedMasterSecret,
+		rrc:                         config.RRC,
 		localSRTPProtectionProfiles: config.SRTPProtectionProfiles,
 		serverName:                  serverName,
 		supportedProtocols:          config.SupportedProtocols,
