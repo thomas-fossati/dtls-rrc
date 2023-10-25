@@ -38,8 +38,10 @@ func (r *UseRRC) Marshal() ([]byte, error) {
 
 	out := make([]byte, useRRCHeaderSize)
 
+	// 00 3d (type=61)
 	binary.BigEndian.PutUint16(out, uint16(r.TypeValue()))
-	binary.BigEndian.PutUint16(out[2:], uint16(0)) // length
+	// 00 00 (length=0)
+	binary.BigEndian.PutUint16(out[2:], uint16(0))
 
 	return out, nil
 }

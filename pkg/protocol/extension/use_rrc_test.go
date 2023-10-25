@@ -8,5 +8,23 @@ import (
 )
 
 func TestExtensionRRC(t *testing.T) {
-	t.Log("TODO")
+	out := UseRRC{
+		Supported: true,
+	}
+
+	b, err := out.Marshal()
+	if err != nil {
+		t.Errorf("marshaling RRC extension failed: %s", err)
+	}
+
+	var in UseRRC
+
+	err = in.Unmarshal(b)
+	if err != nil {
+		t.Errorf("unmarshaling RRC extension failed: %s", err)
+	}
+
+	if !in.Supported {
+		t.Error("expecting RRC supported, got RRC unsupported")
+	}
 }
