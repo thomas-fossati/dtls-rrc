@@ -4,6 +4,7 @@
 package extension
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -24,7 +25,7 @@ func TestExtensionRRC(t *testing.T) {
 		t.Errorf("unmarshaling RRC extension failed: %s", err)
 	}
 
-	if !in.Supported {
-		t.Error("expecting RRC supported, got RRC unsupported")
+	if !reflect.DeepEqual(out, in) {
+		t.Errorf("want: %#v, got: %#v", in, out)
 	}
 }
