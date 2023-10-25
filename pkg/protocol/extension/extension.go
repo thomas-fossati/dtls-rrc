@@ -21,7 +21,7 @@ const (
 	ALPNTypeValue                         TypeValue = 16
 	UseExtendedMasterSecretTypeValue      TypeValue = 23
 	ConnectionIDTypeValue                 TypeValue = 54
-	RRCTypeValue                          TypeValue = 61
+	UseRRCTypeValue                       TypeValue = 61 // TBD1 self-allocated
 	RenegotiationInfoTypeValue            TypeValue = 65281
 )
 
@@ -80,8 +80,8 @@ func Unmarshal(buf []byte) ([]Extension, error) {
 			err = unmarshalAndAppend(buf[offset:], &RenegotiationInfo{})
 		case ConnectionIDTypeValue:
 			err = unmarshalAndAppend(buf[offset:], &ConnectionID{})
-		case RRCTypeValue:
-			err = unmarshalAndAppend(buf[offset:], &RRC{})
+		case UseRRCTypeValue:
+			err = unmarshalAndAppend(buf[offset:], &UseRRC{})
 		default:
 		}
 		if err != nil {
