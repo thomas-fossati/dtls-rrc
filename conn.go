@@ -931,14 +931,16 @@ func (c *Conn) handleIncomingPacket(ctx context.Context, buf []byte, rAddr net.A
 	case *protocol.RRC:
 		c.log.Tracef("%s: <- RRC", srvCliStr(c.state.isClient))
 
-		_ = markPacketAsValid()
+		if c.state.rrc {
+			_ = markPacketAsValid()
 
-		if content.Type == protocol.RrcPathChallenge {
-			if _, err := c.SendRRCPathResponse(content.Cookie); err != nil {
-				c.log.Debugf("writing RRC path_response failed: %v", err)
+			if content.Type == protocol.RrcPathChallenge {
+				if _, err := c.SendRRCPathResponse(content.Cookie); err != nil {
+					c.log.Debugf("writing RRC path_response failed: %v", err)
+				}
+			} else {
+				c.log.Debugf("expecting path_challenge, got %s", content.Type)
 			}
-		} else {
-			c.log.Debugf("expecting path_challenge, got %s", content.Type)
 		}
 
 	default:
