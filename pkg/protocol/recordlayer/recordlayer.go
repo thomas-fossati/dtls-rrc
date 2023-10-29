@@ -81,6 +81,8 @@ func (r *RecordLayer) Unmarshal(data []byte) error {
 		r.Content = &handshake.Handshake{}
 	case protocol.ContentTypeApplicationData:
 		r.Content = &protocol.ApplicationData{}
+	case protocol.ContentTypeRRC:
+		r.Content = &protocol.RRC{}
 	default:
 		return errInvalidContentType
 	}

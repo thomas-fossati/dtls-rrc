@@ -4,7 +4,6 @@
 package protocol
 
 import (
-	"fmt"
 	"math/rand"
 	"reflect"
 	"testing"
@@ -19,16 +18,14 @@ func TestRRCMsg(t *testing.T) {
 
 	for _, typ := range msgTypes {
 		out := RRC{
-			typ:    typ,
-			cookie: rand.Uint64(),
+			Type:   typ,
+			Cookie: rand.Uint64(),
 		}
 
 		b, err := out.Marshal()
 		if err != nil {
 			t.Errorf("marshaling RRC failed: %s", err)
 		}
-
-		fmt.Printf("marshalled => %x\n", b)
 
 		var in RRC
 

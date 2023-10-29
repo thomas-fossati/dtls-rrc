@@ -329,6 +329,8 @@ func (c *PacketConn) WriteTo(p []byte, addr net.Addr) (n int, err error) {
 		// identifier.
 		if id != nil && c.rmraddr.Load() == nil && addr.String() != c.raddr.String() {
 			c.listener.connLock.Lock()
+			// THO: remove old peer address
+			// not clear when the new peer address is recorded
 			delete(c.listener.conns, c.raddr.String())
 			c.rmraddr.Store(true)
 			c.listener.connLock.Unlock()

@@ -27,8 +27,8 @@ const (
 )
 
 type RRC struct {
-	typ    RrcMsgType
-	cookie uint64
+	Type   RrcMsgType
+	Cookie uint64
 }
 
 // ContentType returns the RRC ContentType
@@ -40,14 +40,14 @@ func (a RRC) ContentType() ContentType {
 func (a *RRC) Marshal() ([]byte, error) {
 	out := make([]byte, RRCMsgSize)
 
-	switch a.typ {
+	switch a.Type {
 	case RrcPathChallenge, RrcPathResponse, RrcPathDrop:
-		out[0] = byte(a.typ)
+		out[0] = byte(a.Type)
 	default:
 		return nil, errRrcUnknownMsgType
 	}
 
-	binary.BigEndian.PutUint64(out[1:], uint64(a.cookie))
+	binary.BigEndian.PutUint64(out[1:], uint64(a.Cookie))
 
 	return out, nil
 }
@@ -62,12 +62,12 @@ func (a *RRC) Unmarshal(data []byte) error {
 
 	switch t {
 	case RrcPathChallenge, RrcPathResponse, RrcPathDrop:
-		a.typ = t
+		a.Type = t
 	default:
 		return errRrcUnknownMsgType
 	}
 
-	a.cookie = binary.BigEndian.Uint64(data[1:])
+	a.Cookie = binary.BigEndian.Uint64(data[1:])
 
 	return nil
 }

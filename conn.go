@@ -378,6 +378,26 @@ func (c *Conn) Write(p []byte) (int, error) {
 	})
 }
 
+func (c *Conn) RRCPathResponse(cookie uint64) (int, error) {
+	return 1 + 8, /* rrc_msg_type + cookie */
+		c.writePackets(c.writeDeadline, []*packet{
+			{
+				record: &recordlayer.RecordLayer{
+					Header: recordlayer.Header{
+						Epoch:   c.state.getLocalEpoch(),
+						Version: protocol.Version1_2,
+					},
+					Content: &protocol.RRC{
+						Type:   protocol.RrcPathResponse,
+						Cookie: cookie,
+					},
+				},
+				shouldWrapCID: len(c.state.remoteConnectionID) > 0,
+				shouldEncrypt: true,
+			},
+		})
+}
+
 // Close closes the connection.
 func (c *Conn) Close() error {
 	err := c.close(true) //nolint:contextcheck
@@ -908,6 +928,19 @@ func (c *Conn) handleIncomingPacket(ctx context.Context, buf []byte, rAddr net.A
 		case <-c.closed.Done():
 		case <-ctx.Done():
 		}
+	case *protocol.RRC:
+		c.log.Tracef("%s: <- RRC", srvCliStr(c.state.isClient))
+
+		_ = markPacketAsValid()
+
+		if content.Type != protocol.RrcPathChallenge {
+			c.log.Debugf("expecting path-challenge, got %v", content.Type)
+		}
+
+		_, err := c.RRCPathResponse(content.Cookie)
+		if err != nil {
+			c.log.Debugf("writing RRC path-response failed: %v", err)
+		}
 
 	default:
 		return false, &alert.Alert{Level: alert.Fatal, Description: alert.UnexpectedMessage}, fmt.Errorf("%w: %d", errUnhandledContextType, content.ContentType())
@@ -917,6 +950,8 @@ func (c *Conn) handleIncomingPacket(ctx context.Context, buf []byte, rAddr net.A
 	// address if it is the latest record received.
 	// https://datatracker.ietf.org/doc/html/rfc9146#peer-address-update
 	if originalCID && isLatestSeqNum {
+		// THO: this is where we should kick off RRC, or where an RRC has
+		// already been kicked off at a lower layer and we consume the result
 		if rAddr != c.RemoteAddr() {
 			c.lock.Lock()
 			c.rAddr = rAddr
