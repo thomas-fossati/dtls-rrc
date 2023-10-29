@@ -378,8 +378,8 @@ func (c *Conn) Write(p []byte) (int, error) {
 	})
 }
 
-func (c *Conn) RRCPathResponse(cookie uint64) (int, error) {
-	return 1 + 8, /* rrc_msg_type + cookie */
+func (c *Conn) SendRRCPathResponse(cookie uint64) (int, error) {
+	return protocol.RRCMsgSize,
 		c.writePackets(c.writeDeadline, []*packet{
 			{
 				record: &recordlayer.RecordLayer{
@@ -933,13 +933,12 @@ func (c *Conn) handleIncomingPacket(ctx context.Context, buf []byte, rAddr net.A
 
 		_ = markPacketAsValid()
 
-		if content.Type != protocol.RrcPathChallenge {
-			c.log.Debugf("expecting path-challenge, got %v", content.Type)
-		}
-
-		_, err := c.RRCPathResponse(content.Cookie)
-		if err != nil {
-			c.log.Debugf("writing RRC path-response failed: %v", err)
+		if content.Type == protocol.RrcPathChallenge {
+			if _, err := c.SendRRCPathResponse(content.Cookie); err != nil {
+				c.log.Debugf("writing RRC path_response failed: %v", err)
+			}
+		} else {
+			c.log.Debugf("expecting path_challenge, got %s", content.Type)
 		}
 
 	default:

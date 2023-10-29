@@ -6,6 +6,7 @@ package protocol
 import (
 	"encoding/binary"
 	"errors"
+	"fmt"
 )
 
 var (
@@ -21,6 +22,19 @@ const (
 	RrcPathResponse
 	RrcPathDrop
 )
+
+func (r RrcMsgType) String() string {
+	switch r {
+	case RrcPathChallenge:
+		return "path_challenge"
+	case RrcPathResponse:
+		return "path_response"
+	case RrcPathDrop:
+		return "path_drop"
+	}
+
+	return fmt.Sprintf("unknown_rrc_msg(%d)", r)
+}
 
 const (
 	RRCMsgSize = 9
